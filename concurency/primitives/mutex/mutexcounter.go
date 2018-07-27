@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/ghjan/go-designpattern/concurency/mutex/counter"
 	"time"
+	"github.com/ghjan/go-designpattern/concurency/primitives/mutex/counter"
 )
 
 func main() {

@@ -16,6 +16,8 @@ func main() {
 	bufferedChannelDemo2()
 	directionChannel1()
 	selectDemo1()
+	time.Sleep(time.Second * 3)
+	rangeOverChannelDemo()
 }
 
 //channelDemo1
@@ -106,12 +108,32 @@ func receiver(helloCh, goodbyeCh <-chan string, quitCh chan<- bool) {
 	for {
 		select {
 		case msg := <-helloCh:
-			println(msg)
+			fmt.Println(msg)
 		case msg := <-goodbyeCh:
-			println(msg)
+			fmt.Println(msg)
 		case <-time.After(time.Second * 2):
-			println("(receiver)Nothing received in 2 seconds!.Exiting")
+			println("(receiver)Nothing received in 2 seconds!Exiting")
 			quitCh <- true
+			return
 		}
+	}
+}
+
+/* rangeOverChannelDemo
+until the concurrent Goroutine closes this channel. At that moment, the range finishes and the app can exit.
+Range is very useful in taking data from a channel,
+and it's commonly used in fan-in patterns where many different Goroutines send data to the same channel.
+ */
+func rangeOverChannelDemo() {
+	ch := make(chan int)
+	go func() {
+		ch <- 1
+		time.Sleep(time.Second)
+		ch <- 2
+		close(ch)
+	}()
+
+	for v := range ch {
+		fmt.Printf("rangeOverChannelDemo:%d\n", v)
 	}
 }

@@ -20,9 +20,9 @@ func NewBarrier(maxCnt int) *Barrier {
 
 func (barrier *Barrier) BarrierWait() {
 	barrier.cond.L.Lock()
-	if barrier.curCnt--; barrier.curCnt > 0 {
+	if barrier.curCnt--; barrier.curCnt > 0 { //如果curCnt还不是0，还需要等待
 		barrier.cond.Wait()
-	} else {
+	} else { //如果curCnt是0，表示全部凑齐了，可以唤醒所有等待的goroutine了
 		barrier.cond.Broadcast()
 		barrier.curCnt = barrier.maxCnt
 	}
